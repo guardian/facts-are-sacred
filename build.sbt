@@ -10,5 +10,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 libraryDependencies ++= Seq(
   scanamo,
-  awsDynamoDB
+  awsDynamoDB,
+  filters
 )
+
+addCommandAlias("devrun", "run -Dconfig.resource=DEV.conf 9990")
