@@ -11,6 +11,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 libraryDependencies ++= Seq(
   scanamo,
   awsDynamoDB,
+  capi,
+  scalaTest,
   filters
 )
 
