@@ -10,7 +10,7 @@ class Application extends Controller {
 	def viewArticleFeedback(articleUrl: String) = Action {		
 
 		val result = LocalDynamoService.getFeedback(articleUrl)
-		Ok(views.html.index("<p>An article of stuff</p>", result))
+		Ok(views.html.index(result))
 
 	}
 	
