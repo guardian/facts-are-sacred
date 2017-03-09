@@ -3,9 +3,13 @@ package controllers
 import play.api.mvc.{Controller, Action}
 
 import models.Feedback
-import services.LocalDynamoService
+import services._
+
 
 class Application extends Controller {
+
+  val configFile = "config.conf"
+  val capiKey = LocalFileService.getCAPIKey(configFile)
 
 	def viewArticleFeedback(id: String) = Action {		
 
@@ -13,5 +17,5 @@ class Application extends Controller {
 		Ok(views.html.index(result))
 
 	}
-	
+
 }
