@@ -1,3 +1,3 @@
 package models
 
-case class Feedback(identityId: String, article: String, para: Int, message: String)
+case class Feedback(id: String, article: String, identityId: String, para: Int, message: String)
