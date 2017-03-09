@@ -35,12 +35,16 @@ object LocalDynamoService {
 	private val arbitraryThroughputThatIsIgnoredByDynamoDBLocal = new ProvisionedThroughput(1L, 1L)
 
 	def createFeedbackTable() = {
+
+		val attributes = Seq('article -> S)
+
 		client.createTable(
-	    	attributeDefinitions(Seq('id -> S)),
+	    	attributeDefinitions(attributes),
 	    	"feedback",
-	    	keySchema(Seq('id -> S)),
+	    	keySchema(attributes),
 	    	arbitraryThroughputThatIsIgnoredByDynamoDBLocal
 	    )
+
 	}
 
 	// Feedback("1", "123", "my_article", 2, "This is wrong.")
@@ -48,6 +52,14 @@ object LocalDynamoService {
 		Scanamo.exec(client)(table.put(feedback))
 	}
 
-	def getFeedback(id: String) = Scanamo.exec(client)(table.get('id -> id))
+	def getFeedback(articleUrl: String) = {
+
+		val operations = for {
+			articleFeedback <- table.query('article -> articleUrl)
+		} yield articleFeedback.toList
+		
+		Scanamo.exec(client)(operations)
+
+	}
 
 }
