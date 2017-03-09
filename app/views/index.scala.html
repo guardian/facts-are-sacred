@@ -1,3 +1,7 @@
+@import models.Feedback
+
+@(feedback: Option[Either[com.gu.scanamo.error.DynamoReadError,Feedback]])
+
 @styles = {
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 }
@@ -8,4 +12,11 @@
 
 @main(title = "Index", styles, scripts) {
 	<p>Hello World!</p>
+	@{feedback match {
+		case Some(result) => result match {
+			case Right(success) => success.message
+			case _ => "Uh oh"
+		}
+		case None => "Oh dear"
+	}}
 }

@@ -1,2 +1,2 @@
-GET    /    controllers.Application.helloWorld
+GET    /view-article    controllers.Application.viewArticleFeedback(id: String)
 GET    /assets/*file    controllers.Assets.at(path="/public", file)
