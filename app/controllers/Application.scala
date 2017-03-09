@@ -3,7 +3,8 @@ package controllers
 import play.api.mvc.{Controller, Action}
 
 import models.Feedback
-import services._
+import services.CapiQueryService.ArticleContent
+import services.{CapiQueryService,LocalDynamoService,LocalFileService}
 
 
 class Application extends Controller {
@@ -15,7 +16,7 @@ class Application extends Controller {
 
 		val result = LocalDynamoService.getFeedback(id)
 		Ok(views.html.index(result))
-
+    
 	}
 
 }

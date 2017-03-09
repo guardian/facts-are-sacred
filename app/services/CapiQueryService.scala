@@ -15,11 +15,14 @@ import scala.concurrent.duration._
  * Created by mmcnamara on 09/03/17.
  */
 object CapiQueryService {
-    val configFile = "config.conf"
-    val key = LocalFileService.getCAPIKey(configFile)
-    val contentApiClient = new GuardianContentClient(key)
 
-    def getArticleBody(contentURL: String): Option[String] = {
+  case class ArticleContent(headline: String, body: String)
+
+  val configFile = "config.conf"
+  val key = LocalFileService.getCAPIKey(configFile)
+  val contentApiClient = new GuardianContentClient(key)
+
+  def getArticleContent(contentURL: String): Option[ArticleContent] = {
       try {
         val searchQuery = new ItemQuery(contentURL)
           .showFields("all")
@@ -31,7 +34,12 @@ object CapiQueryService {
 
         val apiResponse = contentApiClient.getResponse(searchQuery)
         val returnedResponse = Await.result(apiResponse, (20, SECONDS))
-        returnedResponse.content.flatMap(_.fields).flatMap(_.body)
+        val headline = returnedResponse.content.flatMap(_.fields).flatMap(_.headline)
+        val body = returnedResponse.content.flatMap(_.fields).flatMap(_.body)
+        if(headline.isDefined && body.isDefined)
+          Some(ArticleContent(headline.get, body.get))
+        else
+          None
       } catch {
         case _: Throwable => {
           None
