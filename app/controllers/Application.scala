@@ -12,11 +12,11 @@ class Application extends Controller {
   val configFile = "config.conf"
   val capiKey = LocalFileService.getCAPIKey(configFile)
 
-	def viewArticleFeedback(id: String) = Action {		
+	def viewArticleFeedback(articleUrl: String) = Action {
 
-		val result = LocalDynamoService.getFeedback(id)
-		Ok(views.html.index(result))
-    
+		val result = LocalDynamoService.getFeedback(articleUrl)
+		Ok(views.html.index("<p>An article of stuff</p>", result))
+
 	}
 
 }

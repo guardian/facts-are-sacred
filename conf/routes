@@ -1,2 +1,3 @@
-GET    /view-article    controllers.Application.viewArticleFeedback(id: String)
+GET    /view-article    controllers.Application.viewArticleFeedback(articleUrl: String)
 GET    /assets/*file    controllers.Assets.at(path="/public", file)
+POST   /report          controllers.Report.submit()

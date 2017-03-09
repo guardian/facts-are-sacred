@@ -12,5 +12,8 @@ libraryDependencies ++= Seq(
   scanamo,
   awsDynamoDB,
   capi,
-  scalaTest
+  scalaTest,
+  filters
 )
+
+addCommandAlias("devrun", "run -Dconfig.resource=DEV.conf 9990")

@@ -32,22 +32,45 @@ object LocalDynamoService {
 	    keySchemas.map{ case (symbol, keyType) => new KeySchemaElement(symbol.name, keyType)}.asJava
 	}
 
+	def createTableWithSecondaryIndex(client: AmazonDynamoDB)(tableName: String, secondaryIndexName: String)
+	  	(primaryIndexAttributes: (Symbol, ScalarAttributeType)*)(secondaryIndexAttributes: (Symbol, ScalarAttributeType)*) = {
+
+	    client.createTable(
+	        new CreateTableRequest().withTableName(tableName)
+	            .withAttributeDefinitions(attributeDefinitions(
+	                primaryIndexAttributes.toList ++ (secondaryIndexAttributes.toList diff primaryIndexAttributes.toList)))
+	            .withKeySchema(keySchema(primaryIndexAttributes))
+	            .withProvisionedThroughput(arbitraryThroughputThatIsIgnoredByDynamoDBLocal)
+	            .withGlobalSecondaryIndexes(new GlobalSecondaryIndex()
+	                .withIndexName(secondaryIndexName)
+		            .withKeySchema(keySchema(secondaryIndexAttributes))
+		            .withProvisionedThroughput(arbitraryThroughputThatIsIgnoredByDynamoDBLocal)
+		            .withProjection(new Projection().withProjectionType(ProjectionType.ALL))
+	            )
+	    )
+
+    }
+
 	private val arbitraryThroughputThatIsIgnoredByDynamoDBLocal = new ProvisionedThroughput(1L, 1L)
 
 	def createFeedbackTable() = {
-		client.createTable(
-	    	attributeDefinitions(Seq('id -> S)),
-	    	"feedback",
-	    	keySchema(Seq('id -> S)),
-	    	arbitraryThroughputThatIsIgnoredByDynamoDBLocal
-	    )
+
+		createTableWithSecondaryIndex(client)("feedback", "article-index")('id -> S)('article -> S)
+
 	}
 
 	// Feedback("1", "123", "my_article", 2, "This is wrong.")
 	def putFeedback(feedback: Feedback) = {
+
 		Scanamo.exec(client)(table.put(feedback))
+
 	}
 
-	def getFeedback(id: String) = Scanamo.exec(client)(table.get('id -> id))
+	def getFeedback(articleUrl: String) = {
+
+		val articleIndex = table.index("article-index")
+		Scanamo.exec(client)(articleIndex.query('article -> articleUrl))
+
+	}
 
 }
