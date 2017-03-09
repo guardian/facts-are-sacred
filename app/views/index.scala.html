@@ -1,6 +1,7 @@
 @import models.Feedback
+@import services.CapiQueryService.ArticleContent
 
-@(feedback: List[Either[com.gu.scanamo.error.DynamoReadError,Feedback]])
+@(article: ArticleContent, feedback: List[Either[com.gu.scanamo.error.DynamoReadError,Feedback]])
 
 @styles = {
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
@@ -11,7 +12,10 @@
 }
 
 @main(title = "Index", styles, scripts) {
-	<p>Hello World!</p>
+
+	<h1>@article.headline</h1>
+
+	<article>@Html(article.body)</article>
 
 	@for(result <- feedback) {
 		@{result match {
