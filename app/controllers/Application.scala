@@ -7,9 +7,9 @@ import services.LocalDynamoService
 
 class Application extends Controller {
 
-	def viewArticleFeedback(id: String) = Action {		
+	def viewArticleFeedback(articleUrl: String) = Action {		
 
-		val result = LocalDynamoService.getFeedback(id)
+		val result = LocalDynamoService.getFeedback(articleUrl)
 		Ok(views.html.index(result))
 
 	}
