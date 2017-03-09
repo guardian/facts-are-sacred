@@ -8,10 +8,7 @@ import services.{CapiQueryService,LocalDynamoService,LocalFileService}
 
 
 class Application extends Controller {
-
-  val configFile = "config.conf"
-  val capiKey = LocalFileService.getCAPIKey(configFile)
-
+  
 	def viewArticleFeedback(articleUrl: String) = Action {
 
 		val result = LocalDynamoService.getFeedback(articleUrl)
