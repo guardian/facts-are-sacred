@@ -1,7 +1,8 @@
 @import models.Feedback
 @import services.CapiQueryService.ArticleContent
 
-@(article: ArticleContent, feedback: List[Either[com.gu.scanamo.error.DynamoReadError,Feedback]])
+@import play.api.libs.json.JsValue
+@(article: ArticleContent, feedback: JsValue)
 
 @styles = {
 	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
@@ -13,15 +14,45 @@
 
 @main(title = "Index", styles, scripts) {
 
+
+
+	<div style="left:0;width:50%">
 	<h1>@article.headline</h1>
 
 	<article>@Html(article.body)</article>
+	</div>
+	<script>
+	var comments = @Html(feedback.toString);
+	var article = document.querySelector('article');
+	var paragraphs = [... article.querySelectorAll('p')];
+	paragraphs.map((p,i)=>{
 
-	@for(result <- feedback) {
-		@{result match {
-			case Right(success) => success.message
-			case _ => "Uh oh"
-		}}
+	    let pc = comments.filter((c)=>{
+	        return c.para === i;
+	    });
+		console.log(pc);
+
+		if (pc && pc.length > 0) {
+			let n = document.createElement('div');
+			n.classList.add('comments')
+
+			let head = document.createElement('h1');
+			head.appendChild(document.createTextNode(''+ pc.length));
+			n.appendChild(head);
+			console.log(paragraphs);
+			console.log(comments);
+			console.log(pc);
+
+			let h = [... pc].map((c) => {
+				let s = document.createElement('p');
+				s.appendChild(document.createTextNode(c.message));
+				console.log(s);
+				n.appendChild(s);
+				return s;
+			});
+			//h.forEach(n.appendChild);
+			p.appendChild(n)
+		}
+	});
+	</script>
 	}
-	
-}
