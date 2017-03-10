@@ -10,13 +10,15 @@
 
 @main(title = "Index", styles) {
 
-	<ul>
+	<h1 class="dashboard-header">Feedback Dashboard</h1>
+
+	<ul class="articles">
 		@for(article <- articles) {
-			<li>
-				<h1>
-					<a href="/view-article?articleUrl=@URLEncoder.encode(article._1, "UTF-8")">@article._1</a>
+			<li class="articles__article">
+				<h1 class="articles__heading">
+					<a class="articles__link" href="/view-article?articleUrl=@URLEncoder.encode(article._1, "UTF-8")">@article._1</a>
 				</h1>
-				<p>@article._2</p>
+				<p class="articles__number">@article._2</p>
 			</li>
 		}
 	</ul>

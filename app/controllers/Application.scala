@@ -42,7 +42,7 @@ class Application extends Controller {
 				case Right(a) => Some(a)
 				case _ => None
 			}
-		}.groupBy(_.article).mapValues(_.size).toSeq
+		}.groupBy(_.article).mapValues(_.size).toSeq.sortWith(_._2 > _._2)
 
 		Ok(views.html.articleList(validComments))
 

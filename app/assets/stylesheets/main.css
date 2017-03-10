@@ -32,3 +32,52 @@ p{
 	margin-top: -30px;
 
 }
+
+.dashboard-header {
+	color: coral;
+}
+
+.articles {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.articles__article {
+	flex-basis: 100%;
+	padding: 20px 0;
+}
+
+.articles__heading, .articles__number {
+	display: inline-block;
+}
+
+.articles__heading {
+	width: 92%;
+	font-size: x-large;
+	padding: 0;
+	margin: 0;
+}
+
+.articles__link {
+	text-decoration: none;
+	color: maroon;
+}
+
+.articles__number {
+	width: 5%;
+	font-size: x-large;
+	padding: 0;
+	margin: 0;
+}
+
+.articles__number::after{
+	content:' 💬'
+}
+
+img {
+	width: 100%;
+	height: auto;
+}
