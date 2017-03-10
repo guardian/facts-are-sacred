@@ -1,0 +1,24 @@
+@import services.CapiQueryService.ArticleContent
+@import models.Feedback
+@import java.net.URLEncoder
+
+@(articles: Seq[(String, Int)])
+
+@styles = {
+	<link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
+}
+
+@main(title = "Index", styles) {
+
+	<ul>
+		@for(article <- articles) {
+			<li>
+				<h1>
+					<a href="/view-article?articleUrl=@URLEncoder.encode(article._1, "UTF-8")">@article._1</a>
+				</h1>
+				<p>@article._2</p>
+			</li>
+		}
+	</ul>
+	
+}

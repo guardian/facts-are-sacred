@@ -53,6 +53,12 @@ object LocalDynamoService {
 
 	private val arbitraryThroughputThatIsIgnoredByDynamoDBLocal = new ProvisionedThroughput(1L, 1L)
 
+	def allArticles() = {
+
+		Scanamo.exec(client)(table.scan)
+
+	}
+
 	def createFeedbackTable() = {
 
 		createTableWithSecondaryIndex(client)("feedback", "article-index")('id -> S)('article -> S)
