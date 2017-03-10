@@ -25,4 +25,18 @@ class Application extends Controller {
 
 	}
 
+	def articleList() = Action {
+
+		val comments = LocalDynamoService.allArticles
+		val validComments = comments.flatMap{article =>
+			article match {
+				case Right(a) => Some(a)
+				case _ => None
+			}
+		}.groupBy(_.article).mapValues(_.size).toSeq
+
+		Ok(views.html.articleList(validComments))
+
+	}
+
 }
